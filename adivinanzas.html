@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adivinanzas Difíciles | StormKids</title>
+    <style>
+      :root {
+        --primary: #42a5f5;
+        --secondary: #ff6b6b;
+        --success: #4caf50;
+        --warning: #ffd166;
+        --dark: #333;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        min-height: 100vh;
+      }
+
+      header {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+      }
+
+      .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: bold;
+      }
+
+      .back-btn {
+        display: inline-block;
+        margin: 20px;
+        padding: 10px 20px;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: bold;
+      }
+
+      .riddles-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .riddles-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--dark);
+        font-size: 2rem;
+      }
+
+      .riddle-card {
+        background: linear-gradient(135deg, #ffebee, #fce4ec);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        border-left: 5px solid #f44336;
+      }
+
+      .riddle-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .riddle-question {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: var(--dark);
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .riddle-answer {
+        display: none;
+        padding: 1rem;
+        background: #e8f5e9;
+        border-radius: 10px;
+        margin-top: 1rem;
+        color: #2e7d32;
+        font-size: 1.1rem;
+        text-align: center;
+        border-left: 5px solid var(--success);
+      }
+
+      .show-answer-btn {
+        background: linear-gradient(135deg, #f44336, #e91e63);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: bold;
+        display: block;
+        margin: 0 auto;
+      }
+
+      .show-answer-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .difficulty-badge {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background: #f44336;
+        color: white;
+      }
+
+      footer {
+        background: var(--dark);
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+
+      @keyframes confetti {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">
+          <div class="logo-img">🌳</div>
+          <h1>StormKids</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html" class="nav-link">Inicio</a></li>
+            <li><a href="Juegos.html" class="nav-link">Juegos</a></li>
+            <li><a href="Actividades.html" class="nav-link">Actividades</a></li>
+            <li><a href="recursos.html" class="nav-link">Recursos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <a href="actividades.html" class="back-btn">← Volver a Actividades</a>
+
+    <section class="riddles-container">
+      <h2 class="riddles-title">🧠 Adivinanzas Difíciles</h2>
+      <p style="text-align: center; margin-bottom: 2rem">
+        ¡Solo para mentes brillantes! Descubre estas adivinanzas desafiantes.
+      </p>
+
+      <div class="riddle-card">
+        <div class="difficulty-badge">Desafío Máximo</div>
+        <div class="riddle-question">
+          De noche soy rey, de día me escondo. Tengo grandes ojos y vuelo en
+          silencio. ¿Quién soy?
+        </div>
+        <button class="show-answer-btn">¡Revelar Respuesta!</button>
+        <div class="riddle-answer">
+          ¡El búho! 🦉 Es un ave rapaz que caza por la noche y tiene una vista
+          excelente.
+        </div>
+      </div>
+
+      <div class="riddle-card">
+        <div class="difficulty-badge">Desafío Máximo</div>
+        <div class="riddle-question">
+          Sin ser pájaro, tengo plumas. Sin ser caballo, tengo silla. Sin ser
+          rey, tengo corona. ¿Qué soy?
+        </div>
+        <button class="show-answer-btn">¡Revelar Respuesta!</button>
+        <div class="riddle-answer">
+          ¡La cebolla! 🧅 Tiene "plumas" (las capas), "silla" (la base) y
+          "corona" (las raíces).
+        </div>
+      </div>
+
+      <div class="riddle-card">
+        <div class="difficulty-badge">Desafío Máximo</div>
+        <div class="riddle-question">
+          Todos pasan por mi camino, pero yo nunca paso por el de nadie. Todos
+          me preguntan por su destino, pero yo nunca pregunto nada.
+        </div>
+        <button class="show-answer-btn">¡Revelar Respuesta!</button>
+        <div class="riddle-answer">
+          ¡La calle! 🛣️ Por donde pasan las personas y los vehículos, pero ella
+          no se mueve.
+        </div>
+      </div>
+
+      <div class="riddle-card">
+        <div class="difficulty-badge">Desafío Máximo</div>
+        <div class="riddle-question">
+          Tengo ciudades pero no casas, tengo montañas pero no árboles, tengo
+          agua pero no peces. ¿Qué soy?
+        </div>
+        <button class="show-answer-btn">¡Revelar Respuesta!</button>
+        <div class="riddle-answer">
+          ¡El mapa! 🗺️ Representa ciudades, montañas y ríos, pero no tiene los
+          objetos reales.
+        </div>
+      </div>
+
+      <div class="riddle-card">
+        <div class="difficulty-badge">Desafío Máximo</div>
+        <div class="riddle-question">
+          Corro y corro sin tener pies, llevo noticias sin tener boca, todos me
+          esperan sin conocerme.
+        </div>
+        <button class="show-answer-btn">¡Revelar Respuesta!</button>
+        <div class="riddle-answer">
+          ¡El río! 🌊 Fluye constantemente llevando agua, pero no tiene pies ni
+          boca.
+        </div>
+      </div>
+
+      <div class="riddle-card">
+        <div class="difficulty-badge">Desafío Máximo</div>
+        <div class="riddle-question">
+          Siempre estoy delante de ti, pero no me puedes ver. Siempre te sigo,
+          pero no me puedes agarrar.
+        </div>
+        <button class="show-answer-btn">¡Revelar Respuesta!</button>
+        <div class="riddle-answer">
+          ¡El futuro! ⏳ Siempre está por venir pero no podemos verlo ni
+          agarrarlo.
+        </div>
+      </div>
+
+      <div class="riddle-card">
+        <div class="difficulty-badge">Desafío Máximo</div>
+        <div class="riddle-question">
+          Blanco como la nieve, verde como el árbol, negro como el carbón y con
+          ruedas de cartón.
+        </div>
+        <button class="show-answer-btn">¡Revelar Respuesta!</button>
+        <div class="riddle-answer">
+          ¡La zebra! 🦓 Es blanca y negra, come hierba verde y... ¡esta parte es
+          trampa! Las zebras no tienen ruedas de cartón.
+        </div>
+      </div>
+
+      <div class="riddle-card">
+        <div class="difficulty-badge">Desafío Máximo</div>
+        <div class="riddle-question">
+          Tengo cabeza redonda, sin nariz, ojos ni frente. Y mi cuerpo se
+          compone tan solo de blancos dientes.
+        </div>
+        <button class="show-answer-btn">¡Revelar Respuesta!</button>
+        <div class="riddle-answer">
+          ¡El ajo! 🧄 La "cabeza" redonda son los dientes de ajo unidos.
+        </div>
+      </div>
+
+      <div class="riddle-card">
+        <div class="difficulty-badge">Desafío Máximo</div>
+        <div class="riddle-question">
+          Oro no es, plata no es, abre la cortina y verás lo que es.
+        </div>
+        <button class="show-answer-btn">¡Revelar Respuesta!</button>
+        <div class="riddle-answer">
+          ¡El plátano! 🍌 (La "cortina" es la cáscara del plátano).
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>StormKids</h3>
+          <p>
+            Aprende jugando y diviértete mientras descubres nuevas aventuras.
+          </p>
+        </div>
+        <div class="footer-column">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="juegos.html">Juegos</a></li>
+            <li><a href="actividades.html">Actividades</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="copyright">© 2025 StormKids</p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const showAnswerButtons = document.querySelectorAll(".show-answer-btn");
+
+        showAnswerButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const answer = this.nextElementSibling;
+            const card = this.parentElement;
+
+            answer.style.display = "block";
+            this.style.display = "none";
+
+            createConfetti(card);
+          });
+        });
+
+        function createConfetti(element) {
+          const colors = [
+            "#FF6B6B",
+            "#4ECDC4",
+            "#FFD166",
+            "#06D6A0",
+            "#118AB2",
+          ];
+          for (let i = 0; i < 15; i++) {
+            const confetti = document.createElement("div");
+            confetti.style.position = "absolute";
+            confetti.style.width = "10px";
+            confetti.style.height = "10px";
+            confetti.style.background =
+              colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.borderRadius = "50%";
+            confetti.style.left = Math.random() * 100 + "%";
+            confetti.style.top = "0";
+            confetti.style.animation = `confetti ${
+              Math.random() * 2 + 1
+            }s linear forwards`;
+
+            element.style.position = "relative";
+            element.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 2000);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

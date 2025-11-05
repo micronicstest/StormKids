@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css" />
+    <title>StormKids - Juegos Educativos para Niños</title>
+    <style>
+      body {
+        font-family: "Comic Sans MS", cursive;
+        background: #87ceeb;
+        color: #000;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        padding: 20px;
+        background: #ffffff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      nav ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 10px 0 0 0;
+      }
+      nav a {
+        text-decoration: none;
+        color: #191b1e;
+        font-weight: bold;
+      }
+
+      button {
+        background-color: #ffe167;
+        border: none;
+        color: #191b1e;
+        padding: 10px 15px;
+        margin: 5px;
+        border-radius: 8px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      button:hover {
+        background-color: #ffe066;
+        transform: scale(1.1);
+      }
+
+      #mensaje {
+        font-weight: bold;
+        margin: 15px;
+      }
+      #seleccion {
+        margin: 15px;
+        font-size: 1.1em;
+      }
+      .correcto {
+        color: #00ff99;
+      }
+      .incorrecto {
+        color: #ff6666;
+      }
+
+      #sol {
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, #ffdd00, #ffaa00);
+        border-radius: 50%;
+        margin: 20px auto;
+        box-shadow: 0 0 50px #ffdd00;
+        animation: girar 20s linear infinite;
+      }
+
+      .orbita {
+        display: inline-block;
+        animation: girar 4s linear infinite;
+      }
+
+      @keyframes girar {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        padding: 40px 20px;
+      }
+
+      .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto 20px;
+      }
+
+      .footer-column {
+        flex: 1 1 200px;
+        margin: 10px;
+      }
+
+      .footer-column h3 {
+        margin-bottom: 15px;
+      }
+
+      .footer-column ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .footer-column a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .footer-column a:hover {
+        text-decoration: underline;
+      }
+
+      .copyright {
+        text-align: center;
+        font-size: 14px;
+        color: #aaa;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">
+          <div class="logo-img">🌳</div>
+          <h1>StormKids</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html" class="nav-link">Inicio</a></li>
+            <li><a href="Juegos.html" class="nav-link">Juegos</a></li>
+            <li><a href="Actividades.html" class="nav-link">Actividades</a></li>
+            <li><a href="recursos.html" class="nav-link">Recursos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <h1>🪐 Ordena los Planetas</h1>
+      <p>
+        Selecciona los planetas en el orden correcto según su distancia al Sol.
+      </p>
+
+      <div id="sol"></div>
+
+      <div id="opciones"></div>
+      <p id="seleccion">Tu orden:</p>
+      <p id="mensaje"></p>
+      <button id="btnReiniciar" style="display: none">Reiniciar</button>
+    </main>
+
+    <script>
+      const planetas = [
+        "Mercurio",
+        "Venus",
+        "Tierra",
+        "Marte",
+        "Júpiter",
+        "Saturno",
+        "Urano",
+        "Neptuno",
+      ];
+      let seleccion = [];
+
+      const opcionesDiv = document.getElementById("opciones");
+      const mensaje = document.getElementById("mensaje");
+      const seleccionP = document.getElementById("seleccion");
+      const btnReiniciar = document.getElementById("btnReiniciar");
+
+      let desordenados = [...planetas].sort(() => Math.random() - 0.5);
+
+      function mostrarOpciones() {
+        opcionesDiv.innerHTML = "";
+        desordenados.forEach((p) => {
+          const btn = document.createElement("button");
+          btn.textContent = p;
+          btn.onclick = () => elegirPlaneta(p, btn);
+          opcionesDiv.appendChild(btn);
+        });
+      }
+
+      function elegirPlaneta(nombre, boton) {
+        seleccion.push(nombre);
+        boton.disabled = true;
+        mostrarInfoPlaneta(nombre);
+        actualizarSeleccion();
+        if (seleccion.length === planetas.length) {
+          verificarOrden();
+        }
+      }
+
+      function actualizarSeleccion() {
+        seleccionP.textContent = "Tu orden: " + seleccion.join(" → ");
+      }
+
+      function mostrarInfoPlaneta(nombre) {
+        const info = {
+          Mercurio: "Mercurio: el planeta más cercano al Sol y el más pequeño.",
+          Venus: "Venus: atmósfera densa y extremadamente caliente.",
+          Tierra: "Tierra: nuestro hogar con agua líquida y vida.",
+          Marte: "Marte: el planeta rojo con enormes montañas y valles.",
+          Júpiter: "Júpiter: gigante gaseoso con la Gran Mancha Roja.",
+          Saturno: "Saturno: famoso por sus impresionantes anillos.",
+          Urano: "Urano: gigante helado que gira de lado.",
+          Neptuno: "Neptuno: planeta azul profundo y muy ventoso.",
+        };
+        mensaje.textContent = info[nombre];
+        mensaje.className = "";
+      }
+
+      function verificarOrden() {
+        let correcto = true;
+        for (let i = 0; i < planetas.length; i++) {
+          if (seleccion[i] !== planetas[i]) correcto = false;
+        }
+        if (correcto) {
+          mensaje.textContent =
+            "🎉 ¡Orden correcto! Los planetas orbitan alrededor del Sol";
+          mensaje.className = "correcto";
+
+          const botones = document.querySelectorAll("#opciones button");
+          botones.forEach((b) => b.classList.add("orbita"));
+        } else {
+          mensaje.textContent = "❌ Orden incorrecto. Intenta de nuevo";
+          mensaje.className = "incorrecto";
+        }
+        btnReiniciar.style.display = "inline-block";
+      }
+
+      btnReiniciar.onclick = () => {
+        seleccion = [];
+        desordenados = [...planetas].sort(() => Math.random() - 0.5);
+        mensaje.textContent = "";
+        seleccionP.textContent = "Tu orden: ";
+        btnReiniciar.style.display = "none";
+        mostrarOpciones();
+      };
+
+      mostrarOpciones();
+    </script>
+    <footer>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>StormKids</h3>
+          <p>
+            Aprende jugando y diviértete mientras descubres nuevas aventuras.
+          </p>
+        </div>
+        <div class="footer-column">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="juegos.html">Juegos</a></li>
+            <li><a href="actividades.html">Actividades</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="copyright">© 2025 StormKids</p>
+    </footer>
+  </body>
+</html>

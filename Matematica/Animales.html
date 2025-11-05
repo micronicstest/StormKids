@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuenta con Amigos 🐶🐱</title>
+<style>
+body, html{margin:0;padding:0;height:100%;font-family:Arial,sans-serif;background:linear-gradient(to bottom,#cfeeff,#e0f7ff);}
+.container{max-width:900px;margin:0 auto;padding:12px;}
+.card{background:white;border-radius:12px;padding:16px;box-shadow:0 8px 20px rgba(0,0,0,0.12);}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.header h1{margin:0;font-size:1.6rem;color:#333;}
+.header p{margin:0;color:#555;}
+.playArea{height:500px;background:linear-gradient(to bottom,#dff6ff,#ffffff);border-radius:12px;position:relative;overflow:hidden;border:4px solid #c9f1ff;display:flex;flex-wrap:wrap;align-content:flex-start;justify-content:flex-start;padding:8px;}
+.friend{font-size:48px;cursor:pointer;margin:6px;transition: transform 0.2s;border-radius:12px;padding:6px;}
+.friend.selected{transform: scale(1.3); box-shadow:0 0 12px rgba(255,0,100,0.5);}
+.topHUD{display:flex;gap:12px;margin-bottom:8px;}
+.hudBox{background:#fffaf2;padding:8px 12px;border-radius:10px;font-weight:700;border:1px solid rgba(0,0,0,0.05);}
+.resultBox{margin-top:8px;font-weight:700;text-align:center;font-size:1.2rem;}
+button{padding:10px 14px;border:none;border-radius:10px;background:#ff7a59;color:white;font-weight:800;cursor:pointer;}
+button.alt{background:#fff;border:2px solid #ff7a59;color:#ff7a59;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <div class="header">
+      <div>
+        <h1>Cuenta con Amigos 🐶🐱</h1>
+        <p>Aprende a contar jugando con animales y objetos divertidos</p>
+      </div>
+      <div>
+        <span id="levelBox" class="hudBox">Nivel 1</span>
+      </div>
+    </div>
+
+    <div class="topHUD">
+      <div class="hudBox">
+        <div>Cuenta</div>
+        <div id="targetNumber" style="font-weight:900;font-size:1.5rem;">—</div>
+      </div>
+      <div class="hudBox">
+        <div>Puntaje</div>
+        <div id="score">0</div>
+      </div>
+    </div>
+
+    <div class="playArea" id="playArea"></div>
+
+    <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+      <button id="checkBtn">¡Ya!</button>
+      <button id="startBtn" class="alt">Iniciar Nivel</button>
+      <button id="skipBtn" class="alt">Saltar Nivel</button>
+      <button id="menuBtn" class="alt">⬅ Volver al Menu</button>
+    </div>
+
+    <div class="resultBox" id="resultBox">Pulsa "Iniciar Nivel" para comenzar</div>
+  </div>
+</div>
+
+<audio id="sndPop" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-balloon-pop-2601.mp3"></audio>
+<audio id="sndWin" src="https://assets.mixkit.co/sfx/preview/mixkit-happy-children-tada-2019.mp3"></audio>
+<audio id="sndWrong" src="https://assets.mixkit.co/sfx/preview/mixkit-fast-woosh-2295.mp3"></audio>
+
+<script>
+const LEVELS = [
+  {count:2}, {count:3}, {count:4}, {count:5}, {count:6}, {count:7}, {count:8}
+];
+const friends=['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯'];
+
+const playArea=document.getElementById('playArea');
+const targetNumberEl=document.getElementById('targetNumber');
+const levelBox=document.getElementById('levelBox');
+const resultBox=document.getElementById('resultBox');
+const scoreEl=document.getElementById('score');
+const checkBtn=document.getElementById('checkBtn');
+const startBtn=document.getElementById('startBtn');
+const skipBtn=document.getElementById('skipBtn');
+const menuBtn=document.getElementById('menuBtn');
+const sndPop=document.getElementById('sndPop');
+const sndWin=document.getElementById('sndWin');
+const sndWrong=document.getElementById('sndWrong');
+
+let levelIndex=0;
+let score=0;
+let targetNumber=0;
+let selectedCount=0;
+let friendEls=[];
+
+function clearPlayArea(){ 
+  playArea.innerHTML=''; 
+  friendEls=[]; 
+  selectedCount=0; 
+}
+
+function spawnFriends(){
+  clearPlayArea();
+  const total=LEVELS[levelIndex].count + Math.floor(Math.random()*3);
+  targetNumber=LEVELS[levelIndex].count;
+  targetNumberEl.textContent=targetNumber;
+  levelBox.textContent='Nivel '+(levelIndex+1);
+  for(let i=0;i<total;i++){
+    const el=document.createElement('div');
+    el.className='friend';
+    el.textContent=friends[Math.floor(Math.random()*friends.length)];
+    el.addEventListener('click',()=>{
+      if(el.classList.contains('selected')){
+        el.classList.remove('selected'); selectedCount--;
+      }else{
+        el.classList.add('selected'); selectedCount++;
+      }
+      sndPop.currentTime=0; sndPop.play();
+    });
+    playArea.appendChild(el);
+    friendEls.push(el);
+  }
+  resultBox.textContent='Selecciona los amigos correctos y pulsa ¡Ya!';
+}
+
+function checkAnswer(){
+  if(selectedCount===targetNumber){
+    resultBox.textContent='✅ ¡Correcto!';
+    sndWin.currentTime=0; sndWin.play(); 
+    score+=10;
+    scoreEl.textContent=score;
+    // Avanzar al siguiente nivel automáticamente después de 1.2 segundos
+    setTimeout(()=> {
+      levelIndex++;
+      if(levelIndex<LEVELS.length){
+        spawnFriends();
+      }else{
+        resultBox.textContent='🏆 ¡Felicidades! Completaste todos los niveles';
+        checkBtn.disabled=true; startBtn.disabled=true; skipBtn.disabled=true;
+      }
+    }, 1200);
+  }else{
+    resultBox.textContent='❌ Incorrecto';
+    sndWrong.currentTime=0; sndWrong.play();
+    score-=5; scoreEl.textContent=score;
+  }
+}
+
+startBtn.addEventListener('click',()=>{spawnFriends();});
+checkBtn.addEventListener('click',()=>{checkAnswer();});
+skipBtn.addEventListener('click',()=>{
+  levelIndex++;
+  if(levelIndex<LEVELS.length){ spawnFriends(); } 
+  else{ resultBox.textContent='🏆 ¡Felicidades! Completaste todos los niveles'; checkBtn.disabled=true; startBtn.disabled=true; skipBtn.disabled=true; }
+});
+menuBtn.addEventListener('click',()=>{location.href='../Matematicas.html';});
+</script>
+</body>
+</html>

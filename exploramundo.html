@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css" />
+    <title>StormKids - Juegos Educativos para Niños</title>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">
+          <div class="logo-img">🌳</div>
+          <h1>StormKids</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html" class="nav-link">Inicio</a></li>
+            <li><a href="Juegos.html" class="nav-link">Juegos</a></li>
+            <li><a href="Actividades.html" class="nav-link">Actividades</a></li>
+            <li><a href="recursos.html" class="nav-link">Recursos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌍 Juego del Mundo - StormKids</title>
+<style>
+body {
+  font-family: "Comic Sans MS", cursive;
+  background: linear-gradient(180deg, #a8edea, #fed6e3);
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #333;
+}
+
+header {
+  background: #ffffff;
+  color: white;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+header h1,
+header p {
+  color: #000000; 
+}
+
+.caja {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  transition: transform 0.3s;
+}
+.caja:hover {
+  transform: scale(1.03);
+}
+
+#pregunta {
+  font-size: 20px;
+  color: #2e7d32;
+  margin-bottom: 20px;
+}
+
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.opciones button {
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.opciones button:hover {
+  background: linear-gradient(45deg, #81ecec, #74b9ff);
+  transform: scale(1.05);
+}
+
+
+#btnSiguiente, #btnReiniciar {
+  background: #ffb300;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 10px;
+  margin-top: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  display: none;
+  transition: background 0.3s;
+}
+#btnSiguiente:hover, #btnReiniciar:hover {
+  background: #f57c00;
+}
+
+#mensaje, #dato {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 12px;
+  display: none;
+  animation: aparecer 0.4s ease;
+}
+
+#puntaje {
+  font-weight: bold;
+  margin-top: 15px;
+  color: #1565c0;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.carita {
+  font-size: 40px;
+  animation: saltar 0.5s ease;
+}
+@keyframes saltar {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+  <h1>🌈 ¡Exploradores del Mundo!</h1>
+  <p>Descubre los continentes, océanos y animales del planeta 🌍</p>
+
+<div class="caja">
+  <h2 id="pregunta">Pregunta aquí</h2>
+  <div class="opciones" id="opciones"></div>
+  <div id="mensaje"></div>
+  <div id="dato"></div>
+  <div class="carita" id="carita"></div>
+  <button id="btnSiguiente">Siguiente ➡️</button>
+  <button id="btnReiniciar">🔁 Volver a jugar</button>
+  <p id="puntaje">⭐ Puntos: 0</p>
+</div>
+
+<script>
+let preguntas = [
+  {
+    texto: "¿Cuál es el continente más grande?",
+    opciones: ["Asia", "Europa", "América"],
+    correcta: 0,
+    dato: "Asia es el continente más grande y también el más poblado del mundo 🌏."
+  },
+  {
+    texto: "¿Cuál es el océano más grande del planeta?",
+    opciones: ["Atlántico", "Índico", "Pacífico"],
+    correcta: 2,
+    dato: "El océano Pacífico cubre más del 30% de la superficie de la Tierra 🌊."
+  },
+  {
+    texto: "¿Dónde vive el canguro?",
+    opciones: ["África", "Australia", "América"],
+    correcta: 1,
+    dato: "Los canguros viven en Australia 🇦🇺, y pueden saltar más de 9 metros de un solo brinco!"
+  },
+  {
+    texto: "¿Qué animal es conocido como el rey de la selva?",
+    opciones: ["León", "Elefante", "Tigre"],
+    correcta: 0,
+    dato: "El león es llamado el rey de la selva por su fuerza y su melena majestuosa 🦁."
+  },
+  {
+    texto: "¿Cuántos continentes hay en la Tierra?",
+    opciones: ["5", "6", "7"],
+    correcta: 2,
+    dato: "Existen 7 continentes: Asia, África, América, Europa, Oceanía, la Antártida y la Antártica 🌎."
+  }
+];
+
+const mensajesCorrectos = [
+  "🎉 ¡Excelente explorador!",
+  "🌈 ¡Lo lograste!",
+  "🐘 ¡Súper aventurero!",
+  "🏝️ ¡Conoces el mundo!",
+  "🧭 ¡Respuesta brillante!"
+];
+
+let indice = 0;
+let puntos = 0;
+
+const pregunta = document.getElementById("pregunta");
+const opcionesDiv = document.getElementById("opciones");
+const mensaje = document.getElementById("mensaje");
+const dato = document.getElementById("dato");
+const carita = document.getElementById("carita");
+const puntaje = document.getElementById("puntaje");
+const btnSiguiente = document.getElementById("btnSiguiente");
+const btnReiniciar = document.getElementById("btnReiniciar");
+
+function mostrarPregunta() {
+  let q = preguntas[indice];
+  pregunta.textContent = q.texto;
+  opcionesDiv.innerHTML = "";
+  mensaje.style.display = "none";
+  dato.style.display = "none";
+  carita.textContent = "";
+  q.opciones.forEach((op, i) => {
+    let btn = document.createElement("button");
+    btn.textContent = op;
+    btn.onclick = () => verificar(i, btn);
+    opcionesDiv.appendChild(btn);
+  });
+  btnSiguiente.style.display = "none";
+  btnReiniciar.style.display = "none";
+}
+
+function cambiarFondo() {
+  const fondos = [
+    "#a8edea", "#fff3cd", "#ffd6e3", "#dcedc1", "#bbdefb", "#f3e5f5"
+  ];
+  document.body.style.background = fondos[Math.floor(Math.random() * fondos.length)];
+}
+
+function verificar(opcionSeleccionada, boton) {
+  let q = preguntas[indice];
+  const botones = opcionesDiv.querySelectorAll("button");
+  botones.forEach(b => b.disabled = true);
+
+  if (opcionSeleccionada === q.correcta) {
+    boton.style.background = "linear-gradient(45deg, #a8e6cf, #dcedc1)";
+    mensaje.textContent = mensajesCorrectos[Math.floor(Math.random() * mensajesCorrectos.length)];
+    mensaje.style.color = "#2e7d32";
+    carita.textContent = "😄";
+    puntos++;
+    cambiarFondo();
+  } else {
+    boton.style.background = "linear-gradient(45deg, #ff8a80, #ff5252)";
+    mensaje.textContent = "😅 ¡Casi! Intenta la siguiente.";
+    mensaje.style.color = "#c62828";
+    carita.textContent = "🙃";
+  }
+
+  mensaje.style.display = "block";
+  dato.textContent = q.dato;
+  dato.style.display = "block";
+  puntaje.textContent = "⭐ Puntos: " + puntos;
+  btnSiguiente.style.display = "inline-block";
+}
+
+btnSiguiente.onclick = () => {
+  indice++;
+  if (indice < preguntas.length) {
+    mostrarPregunta();
+  } else {
+    pregunta.textContent = "🎊 ¡Juego Terminado!";
+    opcionesDiv.innerHTML = "";
+    mensaje.textContent = "🏆 Obtuviste " + puntos + " puntos 🌟";
+    mensaje.style.display = "block";
+    mensaje.style.color = "#1565c0";
+    carita.textContent = "🌍";
+    dato.style.display = "none";
+    btnSiguiente.style.display = "none";
+    btnReiniciar.style.display = "inline-block";
+  }
+};
+
+btnReiniciar.onclick = () => {
+  indice = 0;
+  puntos = 0;
+  puntaje.textContent = "⭐ Puntos: 0";
+  mostrarPregunta();
+};
+
+mostrarPregunta();
+</script>
+       <footer>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>StormKids</h3>
+          <p>
+            Aprende jugando y diviértete mientras descubres nuevas aventuras.
+          </p>
+        </div>
+        <div class="footer-column">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="juegos.html">Juegos</a></li>
+            <li><a href="actividades.html">Actividades</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="copyright">© 2025 StormKids</p>
+    </footer>
+</body>
+</html>

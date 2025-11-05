@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ordena la Historia | StormKids</title>
+  <style>
+    :root{
+      --bg:#fffaf0;
+      --card:#ffffff;
+      --accent:#ff8a65;
+      --accent-dark:#ff7043;
+      --text:#2b2b2b;
+      --success:#2ecc71;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#fffdf9 0%,var(--bg) 100%);
+      color:var(--text);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:18px;
+      min-height:100vh;
+    }
+    header{width:100%;max-width:920px;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+    h1{margin:6px 0;font-size:1.6rem}
+    p.lead{margin:0 0 12px 0;color:#6b6b6b}
+    .top-row{max-width:920px;width:100%;display:flex;justify-content:space-between;align-items:center}
+    .game{width:100%;max-width:920px;background:var(--card);border-radius:14px;padding:18px;margin-top:12px;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+    button{background:var(--accent);color:white;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700;box-shadow:0 6px 14px rgba(0,0,0,0.06)}
+    button:hover{background:var(--accent-dark)}
+    button.secondary{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+    button:disabled{opacity:0.5;cursor:not-allowed}
+    #levelCounter{font-weight:800;font-size:1rem}
+    .list-wrap{display:flex;flex-direction:column;gap:12px;align-items:center;padding:6px}
+    .sentence{
+      width:100%;
+      max-width:820px;
+      background:linear-gradient(180deg,#fff,#fff6f4);
+      padding:12px 14px;border-radius:12px;border:2px solid #ffd6cc;cursor:grab;font-weight:700;
+      user-select:none;display:flex;align-items:center;gap:12px;box-shadow:0 6px 18px rgba(0,0,0,0.04)
+    }
+    .sentence.dragging{opacity:0.45}
+    .sentence .num{width:36px;height:36px;border-radius:8px;background:linear-gradient(180deg,#fff,#f2f2f2);display:grid;place-items:center;font-weight:800}
+    .target{min-height:64px;border-radius:12px;border:2px dashed #ffe6dd;padding:12px;display:flex;flex-direction:column;gap:10px;align-items:stretch;justify-content:flex-start}
+    .source{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+    .msg{min-height:1.6em;margin-top:12px;font-weight:800;text-align:center}
+    .stars{display:flex;gap:8px;align-items:center}
+    .star-counter{background:linear-gradient(90deg,#ffd966,#ffb347);color:#6a3b00;padding:8px 12px;border-radius:999px;font-weight:800;display:flex;gap:8px;align-items:center}
+    .star-fly{position:fixed;width:48px;height:48px;z-index:9999;transform-origin:center;pointer-events:none;font-size:40px;filter:drop-shadow(0 6px 20px rgba(0,0,0,0.12));animation:flyStar 900ms ease forwards}
+    @keyframes flyStar{0%{transform:translateY(0) scale(1);opacity:1}40%{transform:translateY(-80px) scale(1.25) rotate(10deg)}100%{transform:translate(-20px,-140px) scale(0.4);opacity:0}}
+    .success{color:var(--success);animation:pop 600ms ease}
+    @keyframes pop{0%{transform:scale(0.95);opacity:0}60%{transform:scale(1.05);opacity:1}100%{transform:scale(1);opacity:1}}
+    .bottom-row{display:flex;justify-content:center;margin-top:12px;gap:10px}
+    @media (max-width:720px){
+      .sentence{font-size:0.95rem;padding:10px}
+      .star-counter{font-size:0.85rem;padding:6px 10px}
+    }
+  </style>
+</head>
+<body>
+  <div class="top-row" style="max-width:920px;">
+    <div>
+      <h1>🧩 Ordena la Historia</h1>
+      <p class="lead">Arrastra las oraciones para formar la mini-historia correcta. 6 niveles — sin tiempo.</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div id="levelCounter">Nivel 1 / 6</div>
+      <div class="stars" aria-live="polite" title="Estrellas conseguidas">
+        <div class="star-counter"><span style="font-size:18px">⭐</span> <span id="starCount">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <main class="game" role="main" style="max-width:920px;">
+    <div class="controls" aria-hidden="false">
+      <button id="prevBtn" class="secondary">⬅ Anterior</button>
+      <button id="nextBtn" class="secondary">Siguiente ➡</button>
+      <button id="shuffleBtn">Barajar</button>
+      <button id="checkBtn">Verificar</button>
+      <button id="resetBtn" class="secondary">Reiniciar nivel</button>
+    </div>
+
+    <section class="list-wrap" aria-label="Zona de juego">
+      <div style="text-align:center;margin-bottom:6px"><strong>Coloca las oraciones en el orden que cuentan la historia.</strong></div>
+      <div class="target" id="target" aria-label="Área para ordenar oraciones"></div>
+      <div style="height:8px"></div>
+      <div class="source" id="source" aria-label="Oraciones mezcladas"></div>
+    </section>
+
+    <div id="msg" class="msg" aria-live="polite"></div>
+
+    <div class="bottom-row">
+      <button id="menuBtn" class="secondary" onclick="window.location.href='../Lectura.html'">Volver al menú</button>
+    </div>
+  </main>
+
+  <audio id="plingAudio" preload="auto" src="https://cdn.pixabay.com/audio/2022/03/15/audio_5a82b4a835.mp3"></audio>
+
+  <script>
+    const levels = [
+      [
+        "Había una vez un perro llamado Max que vivía en una casa con jardín.",
+        "A Max le encantaba correr detrás de las mariposas cada tarde.",
+        "Un día, mientras jugaba, perdió su hueso favorito entre los arbustos.",
+        "Max olfateó por todo el jardín y buscó debajo de las macetas.",
+        "Siguió un rastro hasta un árbol donde vio algo brillante.",
+        "Debajo del árbol encontró su hueso y movió la cola contento."
+      ],
+      [
+        "Sofía encontró un mapa dentro de un viejo libro en el ático.",
+        "El mapa mostraba un sendero que llevaba a una playa escondida.",
+        "Con su mochila y una linterna, siguió las pistas del mapa.",
+        "En el camino ayudó a un pajarito que se había caído del nido.",
+        "Al llegar a la playa, vio una concha grande que brillaba al sol.",
+        "Guardó la concha como recuerdo y volvió a casa muy contenta."
+      ],
+      [
+        "En un valle vivía un pequeño dragón llamado Lumo que era muy tímido.",
+        "Lumo deseaba hacer amigos pero sentía miedo de asustarlos con su fuego.",
+        "Un día vio a una niña que había perdido su cometa en lo alto de un árbol.",
+        "Lumo sopló con cuidado y ayudó a bajar la cometa sin hacer daño.",
+        "La niña sonrió y le ofreció su merienda como agradecimiento.",
+        "Lumo aprendió que con paciencia y cuidado podía ayudar a los demás."
+      ],
+      [
+        "La nave espacial de Ana despegó hacia la luna con una tripulación pequeña.",
+        "Antes del viaje prepararon todo el equipo y practicaron juntos.",
+        "Durante la misión vieron estrellas fugaces y tomaron fotos del espacio.",
+        "En la luna recogieron pequeñas piedras brillantes para estudiar en casa.",
+        "Al regresar, compartieron sus fotos y historias con sus amigos en la escuela.",
+        "Ana comprendió que viajar ayuda a aprender y a soñar en grande."
+      ],
+      [
+        "Hoy en la escuela los niños llevaron sus obras para la feria de arte.",
+        "Carla contó una historia divertida mientras todos pintaban con colores vivos.",
+        "El maestro colocó las pinturas en la pared para que las familias las vieran.",
+        "Al final del día, hubo música y juegos para celebrar el trabajo de todos.",
+        "Los niños se sintieron orgullosos y aprendieron a trabajar en equipo.",
+        "La escuela quedó llena de risas y colores que alegraron a todos."
+      ],
+      [
+        "En el bosque mágico nació una flor que brillaba por la noche.",
+        "Una rana curiosa encontró la flor y la cuidó cada tarde con agua fresca.",
+        "Los animales del bosque se reunieron para ver cómo crecía la flor brillante.",
+        "Una noche la flor cantó una canción y las luciérnagas se acercaron a bailar.",
+        "Desde entonces, el bosque se llenó de luz y los animales se unieron en amistad.",
+        "La rana supo que cuidar algo con amor puede traer mucha alegría al mundo."
+      ]
+    ];
+
+    let currentLevel = 0;
+    let stars = 0;
+    const completed = new Set();
+    const target = document.getElementById('target');
+    const source = document.getElementById('source');
+    const levelCounter = document.getElementById('levelCounter');
+    const starCount = document.getElementById('starCount');
+    const msg = document.getElementById('msg');
+    const pling = document.getElementById('plingAudio');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const checkBtn = document.getElementById('checkBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    function shuffleArray(a){
+      const arr = a.slice();
+      for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+      }
+      return arr;
+    }
+
+    function createSentenceEl(text){
+      const d = document.createElement('div');
+      d.className = 'sentence';
+      d.draggable = true;
+      const num = document.createElement('div');
+      num.className = 'num';
+      num.textContent = '✦';
+      const span = document.createElement('div');
+      span.style.flex = '1';
+      span.textContent = text;
+      d.appendChild(num);
+      d.appendChild(span);
+      d.addEventListener('dragstart', e=>{
+        d.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain','');
+      });
+      d.addEventListener('dragend', ()=> d.classList.remove('dragging'));
+      return d;
+    }
+
+    function loadLevel(i){
+      source.innerHTML = '';
+      target.innerHTML = '';
+      msg.textContent = '';
+      const correct = levels[i];
+      const mixed = shuffleArray(correct);
+      mixed.forEach(s => source.appendChild(createSentenceEl(s)));
+      levelCounter.textContent = `Nivel ${i+1} / ${levels.length}`;
+      prevBtn.disabled = i === 0;
+      nextBtn.disabled = i === levels.length - 1;
+    }
+
+    function getDragAfterElement(container, y){
+      const draggableElements = [...container.querySelectorAll('.sentence:not(.dragging)')];
+      return draggableElements.reduce((closest, child)=>{
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if(offset < 0 && offset > closest.offset) return {offset: offset, element: child};
+        else return closest;
+      }, {offset: Number.NEGATIVE_INFINITY}).element || null;
+    }
+
+    function handleDragOver(e){
+      e.preventDefault();
+      const after = getDragAfterElement(target, e.clientY);
+      const dragging = document.querySelector('.sentence.dragging');
+      if(!dragging) return;
+      if(after == null) target.appendChild(dragging); else target.insertBefore(dragging, after);
+    }
+
+    function handleSourceDragOver(e){
+      e.preventDefault();
+      const after = getDragAfterElement(source, e.clientY);
+      const dragging = document.querySelector('.sentence.dragging');
+      if(!dragging) return;
+      if(after == null) source.appendChild(dragging); else source.insertBefore(dragging, after);
+    }
+
+    function getCurrentOrder(){
+      return [...target.querySelectorAll('.sentence')].map(n => n.textContent.replace('✦','').trim());
+    }
+
+    function checkOrder(){
+      const current = getCurrentOrder();
+      const correct = levels[currentLevel];
+      if(current.length !== correct.length){
+        msg.textContent = '❗ Coloca todas las oraciones en el recuadro.';
+        msg.classList.remove('success');
+        return;
+      }
+      const ok = current.every((v,i) => v === correct[i]);
+      if(ok){
+        onSuccess();
+      } else {
+        msg.textContent = '❌ Aún no es el orden correcto. Intenta otra vez.';
+        msg.classList.remove('success');
+      }
+    }
+
+    function onSuccess(){
+      msg.textContent = '🎉 ¡Muy bien! Historia ordenada.';
+      msg.classList.add('success');
+      try{ pling.currentTime = 0; pling.play(); }catch(e){}
+      spawnStar();
+      if(!completed.has(currentLevel)){ completed.add(currentLevel); stars++; starCount.textContent = stars; }
+      if(stars === levels.length){
+        setTimeout(()=> msg.textContent = '🏆 ¡Felicidades! Completaste todos los niveles.', 600);
+      } else {
+        setTimeout(()=> {
+          if(currentLevel < levels.length - 1){ currentLevel++; loadLevel(currentLevel); } else { msg.textContent = '🏁 Último nivel completado.'; }
+        }, 900);
+      }
+    }
+
+    function spawnStar(){
+      const s = document.createElement('div');
+      s.className = 'star-fly';
+      s.textContent = '⭐';
+      const startX = window.innerWidth/2 + (Math.random()*120 - 60);
+      const startY = window.innerHeight/2 + (Math.random()*60 - 30);
+      s.style.left = `${startX}px`; s.style.top = `${startY}px`;
+      document.body.appendChild(s);
+      setTimeout(()=> s.remove(),1000);
+    }
+
+    source.addEventListener('dragover', handleSourceDragOver);
+    target.addEventListener('dragover', handleDragOver);
+
+    source.addEventListener('click', e=>{
+      const el = e.target.closest('.sentence');
+      if(el) target.appendChild(el);
+    });
+
+    target.addEventListener('click', e=>{
+      const el = e.target.closest('.sentence');
+      if(el) source.appendChild(el);
+    });
+
+    prevBtn.addEventListener('click', ()=> { if(currentLevel > 0){ currentLevel--; loadLevel(currentLevel); }});
+    nextBtn.addEventListener('click', ()=> { if(currentLevel < levels.length - 1){ currentLevel++; loadLevel(currentLevel); }});
+    shuffleBtn.addEventListener('click', ()=> loadLevel(currentLevel));
+    checkBtn.addEventListener('click', checkOrder);
+    resetBtn.addEventListener('click', ()=> { completed.delete(currentLevel); loadLevel(currentLevel); });
+
+    loadLevel(currentLevel);
+  </script>
+</body>
+</html>

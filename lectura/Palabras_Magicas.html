@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palabras Mágicas | StormKids</title>
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+    body { 
+      text-align: center; 
+      background: linear-gradient(135deg, #fff8f0, #ffe6d1); 
+      font-family: 'Comic Sans MS', sans-serif;
+      transition: background 0.3s;
+    }
+    h1 { margin-top: 30px; color: #ff6f61; }
+    p { font-size: 1.2rem; color: #444; }
+    .word-box { 
+      margin-top: 30px; 
+      font-size: 2rem; 
+      color: #333; 
+      font-weight: bold; 
+      animation: fadeIn 0.6s ease; 
+    }
+    .options { 
+      margin: 20px; 
+      display: flex; 
+      justify-content: center; 
+      gap: 15px; 
+      flex-wrap: wrap; 
+    }
+    .option {
+      background: #ff9a76; 
+      color: white; 
+      padding: 15px 25px; 
+      border-radius: 12px;
+      cursor: pointer; 
+      font-size: 1.2rem; 
+      transition: 0.3s; 
+      border: none;
+    }
+    .option:hover { background: #ff6f61; transform: scale(1.1); }
+    .message { 
+      margin-top: 20px; 
+      font-weight: bold; 
+      font-size: 1.3rem; 
+      height: 30px; 
+      color: #333;
+    }
+    .level { 
+      font-size: 1.1rem; 
+      color: #555; 
+      margin-bottom: 10px; 
+    }
+    button { 
+      background: #32cd32; 
+      color: white; 
+      border: none; 
+      padding: 10px 20px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      margin-top: 30px; 
+    }
+    button:hover { background: #2da02d; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <h1>📖 Palabras Mágicas</h1>
+  <div class="level" id="level">Nivel 1 de 5</div>
+  <p id="instruction">Escoge la palabra correcta que completa la frase:</p>
+
+  <div class="word-box" id="sentence">“El <strong>____</strong> ladra por la noche.”</div>
+
+  <div class="options" id="options"></div>
+
+  <div class="message" id="msg"></div>
+
+  <button onclick="window.location.href='../Lectura.html'">⬅ Volver al Menu</button>
+
+  <script>
+    const levels = [
+      { text: "El ____ ladra por la noche.", options: ["Gato", "Perro", "Pájaro"], correct: "Perro" },
+      { text: "El sol sale por el ____.", options: ["Oeste", "Norte", "Este"], correct: "Este" },
+      { text: "La ____ da sombra en el parque.", options: ["Flor", "Montaña", "Árbol"], correct: "Árbol" },
+      { text: "El ____ nada en el agua.", options: ["Perro", "Pez", "Gato"], correct: "Pez" },
+      { text: "La ____ brilla en el cielo por la noche.", options: ["Estrella", "Nube", "Flor"], correct: "Estrella" }
+    ];
+
+    let currentLevel = 0;
+
+    function loadLevel() {
+      const level = levels[currentLevel];
+
+      const sentenceHTML = "“" + level.text.replace("____", "<strong>____</strong>") + "”";
+      document.getElementById("sentence").innerHTML = sentenceHTML;
+
+      document.getElementById("level").textContent = `Nivel ${currentLevel + 1} de ${levels.length}`;
+
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      level.options.forEach(opt => {
+        const btn = document.createElement("div");
+        btn.className = "option";
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        optionsDiv.appendChild(btn);
+      });
+
+      document.getElementById("msg").textContent = "";
+    }
+
+    function checkAnswer(selected) {
+      const level = levels[currentLevel];
+      const msg = document.getElementById("msg");
+
+      if (selected === level.correct) {
+        msg.textContent = "🎉 ¡Muy bien! Has acertado.";
+        msg.style.color = "green";
+        setTimeout(() => {
+          currentLevel++;
+          if (currentLevel < levels.length) {
+            loadLevel();
+          } else {
+            showVictory();
+          }
+        }, 1000);
+      } else {
+        msg.textContent = "😅 Ups... intenta otra vez.";
+        msg.style.color = "red";
+      }
+    }
+
+    function showVictory() {
+      document.body.innerHTML = `
+        <h1>🏆 ¡Felicidades!</h1>
+        <p>Has completado los 5 niveles de <strong>Palabras Mágicas</strong>.</p>
+        <p>¡Eres un verdadero maestro de las palabras! 🪄</p>
+        <button onclick="window.location.href='lectura.html'">⬅ Volver a Lectura</button>
+      `;
+    }
+
+    loadLevel();
+  </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css" />
+    <title>StormKids - Juegos Educativos para Niños</title>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">
+          <div class="logo-img">🌳</div>
+          <h1>StormKids</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html" class="nav-link">Inicio</a></li>
+            <li><a href="Juegos.html" class="nav-link">Juegos</a></li>
+            <li><a href="Actividades.html" class="nav-link">Actividades</a></li>
+            <li><a href="recursos.html" class="nav-link">Recursos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <section class="hero">
+      <h2>Aprender Jugando Nunca Fue Tan Divertido</h2>
+      <p>
+        Descubre cientos de juegos educativos diseñados para niños de 3 a 10
+        años. Fomenta el aprendizaje mientras se divierten.
+      </p>
+      <button class="btn btn-primary btn-large">Explorar Juegos</button>
+    </section>
+    <section class="categories">
+      <h2 class="section-title">Categorías de Aprendizaje</h2>
+      <div class="category-grid">
+        <div class="category-card" data-category="lectura">
+          <a href="Lectura.html">
+            <div class="category-icon">📚</div>
+            <div class="category-info">
+              <h3>Lectura y Escritura</h3>
+              <p>Desarrolla habilidades de lectoescritura</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="category-card" data-category="matematicas">
+          <a href="Matematicas.html">
+            <div class="category-icon">🔢</div>
+            <div class="category-info">
+              <h3>Matemáticas</h3>
+              <p>Aprende números y operaciones básicas</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="category-card" data-category="ciencias">
+          <a href="Ciencias.html">
+            <div class="category-icon">🔬</div>
+            <div class="category-info">
+              <h3>Ciencias</h3>
+              <p>Descubre el mundo que nos rodea</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="category-card" data-category="ingles">
+          <a href="Ingles.html">
+            <div class="category-icon">🌎</div>
+            <div class="category-info">
+              <h3>Inglés</h3>
+              <p>Primeros pasos en un nuevo idioma</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>StormKids</h3>
+          <p>
+            Aprende jugando y diviértete mientras descubres nuevas aventuras.
+          </p>
+        </div>
+        <div class="footer-column">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="juegos.html">Juegos</a></li>
+            <li><a href="actividades.html">Actividades</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="copyright">© 2025 StormKids</p>
+    </footer>
+    <div class="customization-panel" id="customizationPanel">
+      <h2 class="panel-title">Personalizar Sitio</h2>
+
+      <div class="color-options">
+        <h3>Colores</h3>
+        <div class="color-option">
+          <div
+            class="color-preview"
+            style="background-color: #4caf50"
+            data-color="#4CAF50"
+          ></div>
+          <span>Verde (Original)</span>
+        </div>
+        <div class="color-option">
+          <div
+            class="color-preview"
+            style="background-color: #2196f3"
+            data-color="#2196F3"
+          ></div>
+          <span>Azul</span>
+        </div>
+        <div class="color-option">
+          <div
+            class="color-preview"
+            style="background-color: #9c27b0"
+            data-color="#9C27B0"
+          ></div>
+          <span>Púrpura</span>
+        </div>
+        <div class="color-option">
+          <div
+            class="color-preview"
+            style="background-color: #ff5722"
+            data-color="#FF5722"
+          ></div>
+          <span>Naranja</span>
+        </div>
+      </div>
+
+      <div class="layout-options">
+        <h3>Diseño</h3>
+        <div class="layout-option">
+          <label>
+            <input type="radio" name="layout" value="grid" checked />
+            Diseño en cuadrícula
+          </label>
+        </div>
+        <div class="layout-option">
+          <label>
+            <input type="radio" name="layout" value="list" />
+            Diseño en lista
+          </label>
+        </div>
+      </div>
+
+      <button class="btn reset-btn" id="resetBtn">Restablecer</button>
+    </div>
+    <div class="customization-toggle" id="customizationToggle">🎨</div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const panel = document.getElementById("customizationPanel");
+        const toggle = document.getElementById("customizationToggle");
+        const resetBtn = document.getElementById("resetBtn");
+        const colorOptions = document.querySelectorAll(".color-preview");
+        const layoutOptions = document.querySelectorAll('input[name="layout"]');
+        toggle.addEventListener("click", function () {
+          panel.classList.toggle("open");
+        });
+        colorOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            const color = this.getAttribute("data-color");
+            document.documentElement.style.setProperty(
+              "--primary-color",
+              color
+            );
+            document.querySelectorAll(".btn-primary").forEach((btn) => {
+              btn.style.backgroundColor = color;
+            });
+            document.querySelector(
+              ".hero"
+            ).style.background = `linear-gradient(135deg, ${color}, var(--accent-color))`;
+          });
+        });
+        layoutOptions.forEach((option) => {
+          option.addEventListener("change", function () {
+            if (this.value === "list") {
+              document.querySelector(
+                ".category-grid"
+              ).style.gridTemplateColumns = "1fr";
+              document.querySelector(".games-grid").style.gridTemplateColumns =
+                "1fr";
+            } else {
+              document.querySelector(
+                ".category-grid"
+              ).style.gridTemplateColumns =
+                "repeat(auto-fill, minmax(250px, 1fr))";
+              document.querySelector(".games-grid").style.gridTemplateColumns =
+                "repeat(auto-fill, minmax(280px, 1fr))";
+            }
+          });
+        });
+        resetBtn.addEventListener("click", function () {
+          document.documentElement.style.removeProperty("--primary-color");
+          document.querySelectorAll(".btn-primary").forEach((btn) => {
+            btn.style.backgroundColor = "";
+          });
+          document.querySelector(".hero").style.background = "";
+          document.querySelector('input[value="grid"]').checked = true;
+          document.querySelector(".category-grid").style.gridTemplateColumns =
+            "";
+          document.querySelector(".games-grid").style.gridTemplateColumns = "";
+          panel.classList.remove("open");
+        });
+        document.querySelectorAll(".category-card").forEach((card) => {
+          card.addEventListener("click", function () {
+            const category = this.getAttribute("data-category");
+            alert(`Has seleccionado la categoría: ${category}`);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

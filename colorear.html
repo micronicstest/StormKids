@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Colorear | StormKids</title>
+    <style>
+      :root {
+        --primary: #42a5f5;
+        --secondary: #ff6b6b;
+        --success: #4caf50;
+        --warning: #ffd166;
+        --dark: #333;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        min-height: 100vh;
+      }
+
+      header {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+      }
+
+      .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: bold;
+      }
+
+      .back-btn {
+        display: inline-block;
+        margin: 20px;
+        padding: 10px 20px;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: bold;
+      }
+
+      .coloring-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .coloring-title {
+        margin-bottom: 1rem;
+        color: var(--dark);
+        font-size: 2rem;
+      }
+
+      .coloring-canvas-container {
+        margin-bottom: 1.5rem;
+      }
+
+      #coloring-canvas {
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        cursor: crosshair;
+        background: #f9f9f9;
+        max-width: 100%;
+      }
+
+      .color-palette {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 1.5rem 0;
+      }
+
+      .color-option {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: transform 0.2s;
+      }
+
+      .color-option:hover {
+        transform: scale(1.2);
+      }
+
+      .color-option.active {
+        border-color: var(--dark);
+        transform: scale(1.2);
+      }
+
+      .coloring-controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.3s;
+      }
+
+      .btn:hover {
+        transform: scale(1.05);
+      }
+
+      .btn-primary {
+        background: var(--success);
+      }
+
+      footer {
+        background: var(--dark);
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">
+          <div class="logo-img">🌳</div>
+          <h1>StormKids</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html" class="nav-link">Inicio</a></li>
+            <li><a href="Juegos.html" class="nav-link">Juegos</a></li>
+            <li><a href="Actividades.html" class="nav-link">Actividades</a></li>
+            <li><a href="recursos.html" class="nav-link">Recursos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <a href="actividades.html" class="back-btn">← Volver a Actividades</a>
+
+    <section class="coloring-container">
+      <h2 class="coloring-title">🎨 Taller de Colorear</h2>
+      <p style="margin-bottom: 1.5rem">
+        Elige un color y pinta el dibujo. ¡Sé creativo!
+      </p>
+
+      <div class="coloring-canvas-container">
+        <canvas id="coloring-canvas" width="600" height="400"></canvas>
+      </div>
+
+      <div class="color-palette">
+        <div
+          class="color-option active"
+          style="background-color: #ff5252"
+          data-color="#FF5252"
+        ></div>
+        <div
+          class="color-option"
+          style="background-color: #ff9800"
+          data-color="#FF9800"
+        ></div>
+        <div
+          class="color-option"
+          style="background-color: #ffeb3b"
+          data-color="#FFEB3B"
+        ></div>
+        <div
+          class="color-option"
+          style="background-color: #4caf50"
+          data-color="#4CAF50"
+        ></div>
+        <div
+          class="color-option"
+          style="background-color: #2196f3"
+          data-color="#2196F3"
+        ></div>
+        <div
+          class="color-option"
+          style="background-color: #9c27b0"
+          data-color="#9C27B0"
+        ></div>
+        <div
+          class="color-option"
+          style="background-color: #000000"
+          data-color="#000000"
+        ></div>
+        <div
+          class="color-option"
+          style="background-color: #ffffff; border: 1px solid #ccc"
+          data-color="#FFFFFF"
+        ></div>
+      </div>
+
+      <div class="coloring-controls">
+        <button id="clear-btn" class="btn">Borrar Todo</button>
+        <button id="save-btn" class="btn btn-primary">Guardar Dibujo</button>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>StormKids</h3>
+          <p>
+            Aprende jugando y diviértete mientras descubres nuevas aventuras.
+          </p>
+        </div>
+        <div class="footer-column">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="juegos.html">Juegos</a></li>
+            <li><a href="actividades.html">Actividades</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="copyright">© 2025 StormKids</p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const canvas = document.getElementById("coloring-canvas");
+        const ctx = canvas.getContext("2d");
+        const colorOptions = document.querySelectorAll(".color-option");
+        const clearBtn = document.getElementById("clear-btn");
+        const saveBtn = document.getElementById("save-btn");
+
+        let isDrawing = false;
+        let currentColor = "#FF5252";
+
+        function drawBaseImage() {
+          ctx.fillStyle = "#f9f9f9";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          ctx.strokeStyle = "#333";
+          ctx.lineWidth = 2;
+
+          ctx.beginPath();
+          ctx.arc(300, 150, 80, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(270, 130, 15, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(330, 130, 15, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(270, 130, 5, 0, Math.PI * 2);
+          ctx.fillStyle = "#333";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(330, 130, 5, 0, Math.PI * 2);
+          ctx.fillStyle = "#333";
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(300, 170, 20, 0, Math.PI);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(300, 230);
+          ctx.lineTo(300, 350);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(300, 250);
+          ctx.lineTo(250, 300);
+          ctx.moveTo(300, 250);
+          ctx.lineTo(350, 300);
+          ctx.moveTo(300, 350);
+          ctx.lineTo(270, 400);
+          ctx.moveTo(300, 350);
+          ctx.lineTo(330, 400);
+          ctx.stroke();
+        }
+
+        drawBaseImage();
+
+        colorOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            colorOptions.forEach((opt) => opt.classList.remove("active"));
+            this.classList.add("active");
+            currentColor = this.getAttribute("data-color");
+          });
+        });
+
+        canvas.addEventListener("mousedown", startDrawing);
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseout", stopDrawing);
+
+        function startDrawing(e) {
+          isDrawing = true;
+          draw(e);
+        }
+
+        function draw(e) {
+          if (!isDrawing) return;
+
+          const rect = canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          ctx.fillStyle = currentColor;
+          ctx.beginPath();
+          ctx.arc(x, y, 10, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        function stopDrawing() {
+          isDrawing = false;
+        }
+
+        clearBtn.addEventListener("click", function () {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawBaseImage();
+        });
+
+        saveBtn.addEventListener("click", function () {
+          const dataURL = canvas.toDataURL("image/png");
+          const link = document.createElement("a");
+          link.download = "mi-dibujo-stormkids.png";
+          link.href = dataURL;
+          link.click();
+
+          alert("¡Tu dibujo se ha guardado!");
+        });
+      });
+    </script>
+  </body>
+</html>

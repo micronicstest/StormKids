@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧩 Rompecabezas Matemático</title>
+<style>
+body {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(to bottom, #87CEEB, #fff);
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 10px;
+}
+h1 { color: #FF6B6B; text-align:center; }
+h2 { color: #1E90FF; }
+.topHUD { display:flex; justify-content:space-between; margin-bottom:12px; }
+.hudBox { background:#fff; padding:6px 10px; border-radius:10px; text-align:center; font-weight:bold; box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.problem { font-size:1.6rem; color:#FF6B6B; font-weight:bold; text-align:center; margin-bottom:10px; }
+#puzzleArea { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:20px;}
+.piece {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  width:80px; height:80px; display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem; font-weight:bold; border-radius:10px; cursor:pointer; transition: transform 0.2s;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+.piece:hover { transform: scale(1.1); }
+#answerBox {
+  background:#fff; border:3px dashed #FF6B6B; width:120px; height:80px;
+  display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:bold; margin:20px auto; border-radius:12px;
+}
+.resultBox { text-align:center; margin-top:12px; font-weight:bold; font-size:1.2rem; min-height:40px; }
+.controls { text-align:center; margin-top:20px; }
+.controls button { margin: 5px; padding:10px 16px; border-radius:10px; font-weight:bold; cursor:pointer; border:none; background:#FF6B6B; color:white; }
+.controls button.alt { background:#fff; border:2px solid #FF6B6B; color:#FF6B6B; }
+.timer { text-align:center; margin-top:12px; font-weight:bold; font-size:1.2rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🧩 Rompecabezas Matemático</h1>
+  <div class="topHUD">
+    <div class="hudBox" id="levelBox">Nivel: 1 / 7</div>
+    <div class="hudBox" id="scoreBox">Puntaje: 0</div>
+    <div class="hudBox" id="timerBox">Tiempo: 45s</div>
+  </div>
+
+  <div class="problem" id="problem">—</div>
+  <div id="answerBox">?</div>
+  <div id="puzzleArea"></div>
+  <div class="resultBox" id="resultBox">Pulsa "Iniciar Nivel" para comenzar</div>
+
+  <div class="controls">
+    <button id="startBtn">Iniciar Nivel</button>
+    <button class="alt" onclick="location.href='../Matematicas.html'">⬅ Volver al Menu</button>
+  </div>
+</div>
+
+<audio id="bgMusic" loop src="https://assets.mixkit.co/music/preview/mixkit-happy-ukulele-1177.mp3"></audio>
+<audio id="sndWin" src="https://assets.mixkit.co/sfx/preview/mixkit-happy-children-tada-2019.mp3"></audio>
+<audio id="sndWrong" src="https://assets.mixkit.co/sfx/preview/mixkit-fast-woosh-2295.mp3"></audio>
+
+<script>
+const LEVELS = [
+  {aMin:1,aMax:5,bMin:1,bMax:5},
+  {aMin:1,aMax:9,bMin:1,bMax:9},
+  {aMin:3,aMax:10,bMin:2,bMax:8},
+  {aMin:6,aMax:12,bMin:4,bMax:10},
+  {aMin:8,aMax:15,bMin:5,bMax:15},
+  {aMin:12,aMax:20,bMin:6,bMax:18},
+  {aMin:15,aMax:25,bMin:5,bMax:15}
+];
+
+let levelIndex=0, score=0, currentAnswer=0, timer=45, countdown=null;
+
+const problemEl = document.getElementById('problem');
+const puzzleArea = document.getElementById('puzzleArea');
+const answerBox = document.getElementById('answerBox');
+const resultBox = document.getElementById('resultBox');
+const levelBox = document.getElementById('levelBox');
+const scoreBox = document.getElementById('scoreBox');
+const timerBox = document.getElementById('timerBox');
+
+const startBtn = document.getElementById('startBtn');
+const bgMusic = document.getElementById('bgMusic');
+const sndWin = document.getElementById('sndWin');
+const sndWrong = document.getElementById('sndWrong');
+
+function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+function startLevel(){
+  clearInterval(countdown);
+  timer=45;
+  timerBox.textContent='Tiempo: 45s';
+  puzzleArea.innerHTML='';
+  answerBox.textContent='?';
+  resultBox.textContent='';
+  const lvl = LEVELS[levelIndex];
+  const a = randInt(lvl.aMin, lvl.aMax);
+  const b = randInt(lvl.bMin, lvl.bMax);
+  currentAnswer = a + b; // solo suma por ahora
+  problemEl.textContent=`${a} + ${b} = ?`;
+  // crear opciones
+  let options=[currentAnswer];
+  while(options.length<4){
+    let val=randInt(lvl.aMin+lvl.bMin, lvl.aMax+lvl.bMax);
+    if(!options.includes(val)) options.push(val);
+  }
+  options = options.sort(()=>Math.random()-0.5);
+  options.forEach(opt=>{
+    const div=document.createElement('div');
+    div.className='piece';
+    div.textContent=opt;
+    div.onclick=()=>checkAnswer(opt);
+    puzzleArea.appendChild(div);
+  });
+  // contador
+  countdown=setInterval(()=>{
+    timer--;
+    timerBox.textContent=`Tiempo: ${timer}s`;
+    if(timer<=0){
+      clearInterval(countdown);
+      failLevel('Se acabó el tiempo');
+    }
+  },1000);
+}
+
+function checkAnswer(val){
+  if(val===currentAnswer){
+    score+=20;
+    scoreBox.textContent='Puntaje: '+score;
+    sndWin.currentTime=0; sndWin.play();
+    resultBox.textContent='¡Correcto! 🎉';
+    nextLevel();
+  } else {
+    sndWrong.currentTime=0; sndWrong.play();
+    resultBox.textContent='Incorrecto 😢 Intenta de nuevo';
+  }
+}
+
+function failLevel(msg){
+  resultBox.textContent=`❌ ${msg}`;
+}
+
+function nextLevel(){
+  clearInterval(countdown);
+  levelIndex++;
+  if(levelIndex>=LEVELS.length){
+    resultBox.textContent=`🎉 ¡Juego completado! Puntaje final: ${score}`;
+    return;
+  }
+  setTimeout(()=>startLevel(),1000);
+}
+
+// iniciar musica
+bgMusic.volume=0.2;
+bgMusic.play().catch(()=>{});
+startBtn.onclick=startLevel;
+</script>
+</body>
+</html>

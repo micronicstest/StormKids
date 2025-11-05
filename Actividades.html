@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StormKids - Juegos Educativos para Niños</title>
+    <style>
+      :root {
+        --primary: #42a5f5;
+        --secondary: #ff6b6b;
+        --success: #4caf50;
+        --warning: #ffd166;
+        --dark: #333;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        min-height: 100vh;
+      }
+
+      header {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+      }
+
+      .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: bold;
+        transition: color 0.3s;
+      }
+
+      nav a:hover {
+        color: var(--primary);
+      }
+
+      .hero {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: linear-gradient(135deg, var(--primary), #478ed1);
+        color: white;
+        margin-bottom: 2rem;
+      }
+
+      .hero h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.3s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background: white;
+        color: var(--primary);
+      }
+
+      .btn-large {
+        font-size: 1.1rem;
+        padding: 15px 40px;
+      }
+
+      .btn:hover {
+        transform: scale(1.05);
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--dark);
+        font-size: 2rem;
+      }
+
+      .categories {
+        max-width: 1200px;
+        margin: 0 auto 4rem;
+        padding: 0 2rem;
+      }
+
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .category-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .category-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .category-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .category-info h3 {
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .category-info p {
+        color: #666;
+      }
+
+      footer {
+        background: var(--dark);
+        color: white;
+        padding: 3rem 2rem 1rem;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-column h3 {
+        margin-bottom: 1rem;
+        color: var(--warning);
+      }
+
+      .footer-column ul {
+        list-style: none;
+      }
+
+      .footer-column a {
+        color: #ccc;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-column a:hover {
+        color: white;
+      }
+
+      .copyright {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid #555;
+        color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">
+          <div class="logo-img">🌳</div>
+          <h1>StormKids</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html" class="nav-link">Inicio</a></li>
+            <li><a href="Juegos.html" class="nav-link">Juegos</a></li>
+            <li><a href="Actividades.html" class="nav-link">Actividades</a></li>
+            <li><a href="recursos.html" class="nav-link">Recursos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h2>Aprender Jugando Nunca Fue Tan Divertido</h2>
+      <p>
+        Descubre cientos de juegos educativos diseñados para niños de 3 a 10
+        años. Fomenta el aprendizaje mientras se divierten.
+      </p>
+      <a href="actividades.html" class="btn btn-primary btn-large"
+        >Explorar Actividades</a
+      >
+    </section>
+
+    <section class="categories">
+      <h2 class="section-title">🎮 Actividades Divertidas</h2>
+      <p
+        style="
+          text-align: center;
+          margin-bottom: 2rem;
+          color: #666;
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+        "
+      >
+        Selecciona una actividad y diviértete mientras aprendes. ¡Cada juego te
+        ayuda a desarrollar habilidades diferentes!
+      </p>
+
+      <div class="category-grid">
+        <a href="matematicas.html" class="category-card">
+          <div class="category-icon">🧮</div>
+          <div class="category-info">
+            <h3>Matemáticas Divertidas</h3>
+            <p>Resuelve problemas matemáticos y gana puntos</p>
+          </div>
+        </a>
+
+        <a href="adivinanzas.html" class="category-card">
+          <div class="category-icon">❓</div>
+          <div class="category-info">
+            <h3>Adivinanzas Difíciles</h3>
+            <p>Pon a prueba tu ingenio con adivinanzas desafiantes</p>
+          </div>
+        </a>
+
+        <a href="colorear.html" class="category-card">
+          <div class="category-icon">🎨</div>
+          <div class="category-info">
+            <h3>Taller de Colorear</h3>
+            <p>Libera tu creatividad coloreando dibujos</p>
+          </div>
+        </a>
+
+        <a href="lectura.html" class="category-card">
+          <div class="category-icon">📚</div>
+          <div class="category-info">
+            <h3>Lectura y Escritura</h3>
+            <p>Desarrolla habilidades de lectoescritura</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>StormKids</h3>
+          <p>
+            Aprende jugando y diviértete mientras descubres nuevas aventuras.
+          </p>
+        </div>
+        <div class="footer-column">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="juegos.html">Juegos</a></li>
+            <li><a href="actividades.html">Actividades</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="copyright">© 2025 StormKids</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escribe tu Cuento | StormKids</title>
+  <link rel="stylesheet" href="css/index.css">
+  <style>
+    body { text-align: center; background: #fff4f4; }
+    textarea {
+      width: 80%; height: 200px; margin: 20px auto;
+      border: 3px solid #ff6f61; border-radius: 15px;
+      padding: 15px; font-size: 1rem; outline: none;
+    }
+    button {
+      background: #ff6f61; color: white; border: none;
+      padding: 12px 25px; border-radius: 8px; cursor: pointer; margin: 10px;
+    }
+    button:hover { background: #ff3b2e; }
+    #output {
+      margin-top: 20px; font-size: 1.2rem; background: white;
+      padding: 15px; border-radius: 12px; width: 70%; margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>✏ Escribe tu Cuento</h1>
+  <p>Deja volar tu imaginación y escribe una historia divertida:</p>
+
+  <textarea id="story" placeholder="Había una vez..."></textarea><br>
+
+  <button onclick="showStory()">Mostrar mi cuento</button>
+  <button onclick="window.location.href='../lectura.html'">⬅ Volver al Menu</button>
+
+  <div id="output"></div>
+
+  <script>
+    function showStory() {
+      const text = document.getElementById('story').value.trim();
+      const output = document.getElementById('output');
+      if (text === '') {
+        output.textContent = '😅 Escribe algo para crear tu cuento.';
+      } else {
+        output.innerHTML = `
+          <strong>📚 Tu cuento:</strong><br><em>${text}</em>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>

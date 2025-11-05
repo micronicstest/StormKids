@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Suma Rápida | StormKids - Matemáticas</title>
+<meta name="description" content="Suma Rápida: resuelve sumas antes de que se acabe el tiempo. Varios niveles de dificultad." />
+<style>
+  :root{
+    --bg1:#fff8f0; --card:#ffffff; --accent:#ff7a59; --accent-2:#ffb575;
+    --good:#28c76f; --bad:#ff4d4f; --muted:#666;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:Inter, system-ui, -apple-system, "Helvetica Neue", Arial;
+    background:linear-gradient(180deg,#fffdf9 0%,#fff6ee 100%); color:#162029;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .wrap{width:100%;max-width:980px;background:var(--card);border-radius:14px;padding:18px;box-shadow:0 18px 40px rgba(16,24,40,0.08)}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  header h1{margin:0;font-size:1.35rem;display:flex;align-items:center;gap:10px}
+  header p{margin:0;color:var(--muted);font-size:0.95rem}
+  .top-right{display:flex;gap:10px;align-items:center}
+  .button{background:var(--accent);color:white;padding:8px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+  .button.secondary{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+  .main{display:grid;grid-template-columns:1fr 330px;gap:18px;margin-top:16px}
+  @media (max-width:920px){.main{grid-template-columns:1fr}}
+  .gameCard{background:linear-gradient(180deg,#fff,#fff9f6);padding:16px;border-radius:12px;border:1px solid rgba(0,0,0,0.03)}
+  .hud{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  .stat{background:linear-gradient(180deg,#fff,#fffbf8);padding:8px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.03);font-weight:700}
+  .bigQuestion{font-size:2.2rem;font-weight:800; text-align:center;padding:18px 10px;margin:12px 0;border-radius:10px;background:linear-gradient(90deg,#fff,#fffaf2);border:2px dashed #ffe7db}
+  .answerRow{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:10px}
+  input.answer{
+    width:160px;padding:12px;border-radius:10px;border:2px solid #ffd8c7;font-size:1.1rem;text-align:center;font-weight:700;
+    outline:none;
+  }
+  .answer:focus{box-shadow:0 6px 16px rgba(255,122,89,0.12);border-color:var(--accent)}
+  .progress{height:12px;background:#fdece6;border-radius:999px;overflow:hidden;border:1px solid rgba(0,0,0,0.03)}
+  .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%}
+  .controls{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .levels{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+  .lvlBtn{padding:6px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer}
+  .lvlBtn.active{background:var(--accent);color:white;border-color:transparent}
+  .sidebar{display:flex;flex-direction:column;gap:12px}
+  .panel{padding:12px;border-radius:12px;background:linear-gradient(180deg,#fff,#fffaf2);border:1px solid rgba(0,0,0,0.03)}
+  .small{font-size:0.9rem;color:var(--muted)}
+  .center{display:flex;align-items:center;justify-content:center}
+  .lives{display:flex;gap:6px;align-items:center}
+  .heart{color:var(--bad);font-size:20px}
+  .score{font-size:1.4rem;font-weight:900}
+  .hint{font-size:0.95rem;color:#7a7a7a;margin-top:8px}
+  footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:12px}
+  .exitBtn{background:#f0f0f0;color:#333;border-radius:10px;padding:8px 10px;border:0;cursor:pointer}
+  .tiny{font-size:0.85rem;color:#9a9a9a}
+
+  .flash{
+    animation:flash 700ms ease;
+  }
+  @keyframes flash{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .correctPulse{background:linear-gradient(90deg,#eaffef,#dfffe8);border:2px solid #b7f2cf}
+  .wrongPulse{background:linear-gradient(90deg,#fff0f0,#ffecec);border:2px solid #ffbdbd}
+
+  .level-complete{display:flex;align-items:center;gap:8px;justify-content:center;padding:10px;border-radius:10px;background:linear-gradient(90deg,#fff7e6,#fff1d7);font-weight:800}
+
+</style>
+</head>
+<body>
+<div class="wrap" role="application" aria-label="Juego Suma Rápida">
+  <header>
+    <div>
+      <h1>➕ Suma Rápida</h1>
+      <p class="tiny">Resuelve operaciones antes de que acabe el tiempo. Mejora tus sumas por niveles.</p>
+    </div>
+    <div class="top-right">
+      <div class="small">Nivel</div>
+      <div id="currentLevelDisplay" class="stat">1</div>
+      <button class="button" onclick="window.location.href='../Matematicas.html'">⬅ Volver al Menu</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <section>
+      <div class="gameCard" id="gameCard" aria-live="polite">
+        <div class="hud">
+          <div class="stat">Tiempo <div id="timeLeft" style="font-weight:900">--</div></div>
+          <div class="stat">Preguntas <span id="qIndex">0</span>/<span id="qTotal">0</span></div>
+          <div class="stat">Puntaje <div id="score" style="font-weight:900">0</div></div>
+          <div class="stat small">Mejor <div id="best" style="font-weight:900">0</div></div>
+        </div>
+
+        <div class="bigQuestion" id="questionBox" aria-hidden="false">¿Listo?</div>
+
+        <div class="answerRow">
+          <input type="number" id="answerInput" class="answer" inputmode="numeric" autocomplete="off" placeholder="Escribe la suma" />
+          <button class="button" id="submitBtn">Comprobar</button>
+        </div>
+
+        <div class="center">
+          <div style="width:90%">
+            <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="button secondary" id="startBtn">Iniciar Nivel</button>
+          <button class="button secondary" id="skipBtn">Saltar Pregunta</button>
+          <div class="levels small" id="levelsRow" role="tablist"></div>
+        </div>
+
+        <div class="hint center" id="hint">Consejo: escribe la suma y presiona Enter o Comprobar.</div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="panel">
+        <div class="small">Vidas</div>
+        <div class="lives" id="livesBox"></div>
+        <div style="height:8px"></div>
+        <div class="small">Tiempo por pregunta</div>
+        <div id="levelTime" style="font-weight:800">-- s</div>
+      </div>
+
+      <div class="panel">
+        <div class="small">Nivel actual</div>
+        <div class="score" id="lvlScore">0</div>
+        <div class="small">Progreso de preguntas</div>
+        <div id="lvlProgress">0%</div>
+      </div>
+
+      <div class="panel center">
+        <button class="button" id="resetProgressBtn">Reiniciar Progreso</button>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <div class="tiny">Suma Rápida • Hecho para el curso de Matemáticas</div>
+    <div class="tiny">StormKids</div>
+  </footer>
+</div>
+
+<audio id="sndCorrect" src="https://cdn.pixabay.com/audio/2022/03/15/audio_5a82b4a835.mp3"></audio>
+<audio id="sndWrong" src="https://cdn.pixabay.com/audio/2021/08/04/audio_1a3d6e8f3b.mp3"></audio>
+
+<script>
+  const LEVELS = [
+    { id:1, label:"1", questions:6, timePerQ:8, maxAddends:2, maxValue:9, lives:3, pointsPer:10 },
+    { id:2, label:"2", questions:6, timePerQ:7, maxAddends:2, maxValue:19, lives:3, pointsPer:12 },
+    { id:3, label:"3", questions:7, timePerQ:7, maxAddends:2, maxValue:29, lives:3, pointsPer:14 },
+    { id:4, label:"4", questions:7, timePerQ:6, maxAddends:3, maxValue:20, lives:3, pointsPer:16 },
+    { id:5, label:"5", questions:8, timePerQ:6, maxAddends:3, maxValue:30, lives:3, pointsPer:18 },
+    { id:6, label:"6", questions:8, timePerQ:5, maxAddends:3, maxValue:50, lives:3, pointsPer:20 },
+    { id:7, label:"7", questions:9, timePerQ:5, maxAddends:4, maxValue:50, lives:2, pointsPer:22 },
+    { id:8, label:"8", questions:9, timePerQ:4, maxAddends:4, maxValue:80, lives:2, pointsPer:24 },
+    { id:9, label:"9", questions:10,timePerQ:4, maxAddends:5, maxValue:80, lives:2, pointsPer:26 },
+    { id:10,label:"10",questions:10,timePerQ:3, maxAddends:5, maxValue:120,lives:1, pointsPer:30 },
+    { id:11,label:"11",questions:12,timePerQ:3, maxAddends:6, maxValue:150,lives:1, pointsPer:34 },
+    { id:12,label:"12",questions:12,timePerQ:2, maxAddends:6, maxValue:200,lives:1, pointsPer:40 }
+  ];
+
+  const currentLevelDisplay = document.getElementById('currentLevelDisplay');
+  const levelsRow = document.getElementById('levelsRow');
+  const startBtn = document.getElementById('startBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const resetProgressBtn = document.getElementById('resetProgressBtn');
+
+  const questionBox = document.getElementById('questionBox');
+  const answerInput = document.getElementById('answerInput');
+  const progressBar = document.getElementById('progressBar');
+  const timeLeft = document.getElementById('timeLeft');
+  const qIndex = document.getElementById('qIndex');
+  const qTotal = document.getElementById('qTotal');
+  const scoreEl = document.getElementById('score');
+  const bestEl = document.getElementById('best');
+  const livesBox = document.getElementById('livesBox');
+  const levelTime = document.getElementById('levelTime');
+  const lvlScore = document.getElementById('lvlScore');
+  const lvlProgress = document.getElementById('lvlProgress');
+  const msg = document.getElementById('msg');
+
+  const sndCorrect = document.getElementById('sndCorrect');
+  const sndWrong = document.getElementById('sndWrong');
+
+  let chosenLevel = 0;
+  let gameState = null;
+  let timerInterval = null;
+  let progressInterval = null;
+  const STORAGE_KEY = 'suma_rapida_best';
+
+  function init(){
+    const best = parseInt(localStorage.getItem(STORAGE_KEY) || '0',10);
+    bestEl.textContent = best;
+    LEVELS.forEach((lv, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'lvlBtn';
+      btn.textContent = lv.label;
+      btn.title = `Nivel ${lv.id}`;
+      btn.addEventListener('click', ()=> selectLevel(idx));
+      levelsRow.appendChild(btn);
+    });
+    selectLevel(0);
+    buildHearts(LEVELS[0].lives);
+  }
+
+  function selectLevel(idx){
+    chosenLevel = idx;
+    const lv = LEVELS[chosenLevel];
+    currentLevelDisplay.textContent = lv.label;
+    Array.from(levelsRow.children).forEach((b,i)=> b.classList.toggle('active', i===idx));
+    qTotal.textContent = lv.questions;
+    qIndex.textContent = 0;
+    scoreEl.textContent = 0;
+    lvlScore.textContent = 0;
+    lvlProgress.textContent = '0%';
+    levelTime.textContent = lv.timePerQ + ' s';
+    buildHearts(lv.lives);
+    stopGame();
+  }
+
+  function buildHearts(n){
+    livesBox.innerHTML = '';
+    for(let i=0;i<n;i++){
+      const s = document.createElement('div');
+      s.innerHTML = '❤';
+      s.className = 'heart';
+      livesBox.appendChild(s);
+    }
+  }
+
+  function startLevel(){
+    stopGame();
+    const lv = LEVELS[chosenLevel];
+    gameState = {
+      levelIdx: chosenLevel,
+      levelCfg: lv,
+      questionIndex: 0,
+      score: 0,
+      lives: lv.lives,
+      questions: generateQuestions(lv),
+      finished:false
+    };
+    qTotal.textContent = lv.questions;
+    qIndex.textContent = 0;
+    scoreEl.textContent = 0;
+    lvlScore.textContent = 0;
+    lvlProgress.textContent = '0%';
+    nextQuestion();
+  }
+
+  function stopGame(){
+    clearIntervals();
+    gameState = null;
+    questionBox.textContent = 'Pulsa "Iniciar Nivel" para comenzar';
+    answerInput.value = '';
+    progressBar.style.width = '0%';
+    timeLeft.textContent = '--';
+  }
+
+  function clearIntervals(){
+    if(timerInterval) clearInterval(timerInterval);
+    if(progressInterval) clearInterval(progressInterval);
+  }
+
+  function generateQuestions(lv){
+    const arr = [];
+    for(let i=0;i<lv.questions;i++){
+      arr.push(makeSum(lv.maxAddends, lv.maxValue));
+    }
+    return arr;
+  }
+
+  function makeSum(maxAddends, maxValue){
+    const count = Math.floor( Math.random() * (maxAddends - 1 + 1) ) + 2;
+    const parts = [];
+    for(let i=0;i<count;i++){
+      const v = Math.floor(Math.random() * (maxValue + 1));
+      parts.push(v);
+    }
+    const text = parts.join(' + ');
+    const answer = parts.reduce((a,b)=>a+b,0);
+    return {text, answer, parts};
+  }
+
+  function nextQuestion(){
+    if(!gameState) return;
+    const idx = gameState.questionIndex;
+    const total = gameState.levelCfg.questions;
+    if(idx >= total){
+      finishLevel(true);
+      return;
+    }
+    qIndex.textContent = idx+1;
+    const q = gameState.questions[idx];
+    questionBox.textContent = q.text;
+    answerInput.value = '';
+    answerInput.focus();
+    startTimerForCurrent();
+    updateProgressVisual();
+  }
+
+  function startTimerForCurrent(){
+    clearIntervals();
+    const lv = gameState.levelCfg;
+    let time = lv.timePerQ;
+    timeLeft.textContent = time;
+    const total = lv.timePerQ;
+    progressBar.style.width = '100%';
+    const start = Date.now();
+    timerInterval = setInterval(()=> {
+      const elapsed = Math.floor((Date.now()-start)/1000);
+      const left = total - elapsed;
+      if(left <= 0){
+        timeLeft.textContent = 0;
+        handleWrong('Se acabó el tiempo');
+      } else {
+        timeLeft.textContent = left;
+        progressBar.style.width = (left/total*100) + '%';
+      }
+    }, 200);
+  }
+
+  function handleSubmit(){
+    if(!gameState) return;
+    const val = parseInt(answerInput.value,10);
+    if(Number.isNaN(val)){ msg.textContent = 'Escribe un número'; msg.style.color = '#b00'; answerInput.focus(); return; }
+    const q = gameState.questions[gameState.questionIndex];
+    if(val === q.answer){
+      handleCorrect();
+    } else {
+      handleWrong('Respuesta incorrecta');
+    }
+  }
+
+  function handleCorrect(){
+    playSound(sndCorrect);
+    flashCard(true);
+    const pts = gameState.levelCfg.pointsPer;
+    gameState.score += pts;
+    scoreEl.textContent = gameState.score;
+    lvlScore.textContent = gameState.score;
+    markQuestionDone();
+    advanceQuestion();
+  }
+
+  function handleWrong(reason){
+    playSound(sndWrong);
+    flashCard(false);
+    gameState.lives -= 1;
+    updateLivesUI();
+    if(gameState.lives <= 0){
+      finishLevel(false, reason || 'Te quedaste sin vidas');
+      return;
+    }
+    markQuestionDone();
+    advanceQuestion();
+  }
+
+  function markQuestionDone(){
+    gameState.questionIndex++;
+    qIndex.textContent = Math.min(gameState.questionIndex, gameState.levelCfg.questions);
+    const prog = Math.round((gameState.questionIndex / gameState.levelCfg.questions) * 100);
+    lvlProgress.textContent = prog + '%';
+  }
+
+  function advanceQuestion(){
+    clearIntervals();
+    setTimeout(()=> {
+      if(!gameState) return;
+      if(gameState.questionIndex >= gameState.levelCfg.questions) finishLevel(true);
+      else nextQuestion();
+    }, 600);
+  }
+
+  function finishLevel(success, reason){
+    clearIntervals();
+    gameState.finished = true;
+    if(success){
+      questionBox.innerHTML = `<div class="level-complete">🎉 Nivel completado • Puntaje: ${gameState.score}</div>`;
+      saveBest(gameState.score);
+      setTimeout(()=> {
+        if(chosenLevel < LEVELS.length - 1){
+          chosenLevel++;
+          selectLevel(chosenLevel);
+          startLevel();
+        }
+      }, 1100);
+    } else {
+      questionBox.innerHTML = `<div class="level-complete">❌ Nivel fallado • ${reason || ''} • Puntaje: ${gameState.score}</div>`;
+      saveBest(gameState.score);
+    }
+  }
+
+  function saveBest(score){
+    const prev = parseInt(localStorage.getItem(STORAGE_KEY) || '0',10);
+    if(score > prev) localStorage.setItem(STORAGE_KEY, score);
+    bestEl.textContent = Math.max(score, prev);
+  }
+
+  function updateLivesUI(){
+    const hearts = livesBox.querySelectorAll('.heart');
+    hearts.forEach((h,i)=> {
+      h.style.opacity = i < gameState.lives ? '1' : '0.18';
+    });
+  }
+
+  function updateProgressVisual(){
+    const total = gameState.levelCfg.questions;
+    const i = gameState.questionIndex;
+    const perc = Math.round((i/total)*100);
+    progressBar.style.width = perc + '%';
+  }
+
+  function flashCard(ok){
+    const el = document.getElementById('gameCard');
+    el.classList.remove('correctPulse','wrongPulse');
+    if(ok) el.classList.add('correctPulse'); else el.classList.add('wrongPulse');
+    setTimeout(()=> el.classList.remove('correctPulse','wrongPulse'),500);
+  }
+
+  function playSound(audioEl){
+    try{ audioEl.currentTime = 0; audioEl.play(); }catch(e){}
+  }
+
+  function spawnLevelButtons(){
+    Array.from(levelsRow.children).forEach((b,i)=> b.classList.toggle('active', i===chosenLevel));
+  }
+
+  function skipQuestion(){
+    if(!gameState) return;
+    handleWrong('Saltado');
+  }
+
+  function resetProgress(){
+    localStorage.removeItem(STORAGE_KEY);
+    bestEl.textContent = '0';
+    alert('Progreso reiniciado');
+  }
+
+  startBtn.addEventListener('click', ()=> startLevel());
+  submitBtn.addEventListener('click', ()=> handleSubmit());
+  skipBtn.addEventListener('click', ()=> skipQuestion());
+  resetProgressBtn.addEventListener('click', ()=> resetProgress());
+  answerInput.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') handleSubmit();
+  });
+
+  answerInput.addEventListener('wheel', e => e.target.blur());
+
+  init();
+  spawnLevelButtons();
+
+</script>
+</body>
+</html>

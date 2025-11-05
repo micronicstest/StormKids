@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css" />
+    <title>Recursos - StormKids</title>
+    <style>
+      .tabs {
+        max-width: 1000px;
+        margin: 100px auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        padding: 30px;
+      }
+
+      .tab-buttons {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .tab-buttons button {
+        background: #f5f5f5;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+
+      .tab-buttons button:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .tab-buttons .active {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .tab-content {
+        display: none;
+        animation: fade 0.4s ease-in-out;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .tab-content h3 {
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+
+      .tab-content p {
+        color: #555;
+        line-height: 1.6;
+      }
+      .video-grid,
+      .resource-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      iframe {
+        width: 100%;
+        height: 200px;
+        border-radius: 10px;
+      }
+
+      .resource-item {
+        background: #f8f8f8;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        transition: 0.3s;
+      }
+
+      .resource-item:hover {
+        background: #eef4ff;
+        transform: translateY(-5px);
+      }
+
+      .resource-item a {
+        text-decoration: none;
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      .lectura-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+      }
+
+      .lectura-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .lectura-item:hover {
+        transform: scale(1.03);
+      }
+
+      .lectura-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        transition: 0.3s;
+      }
+
+      .lectura-item span {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        text-align: center;
+        padding: 8px;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo">
+          <div class="logo-img">🌳</div>
+          <h1>StormKids</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html" class="nav-link">Inicio</a></li>
+            <li><a href="Juegos.html" class="nav-link">Juegos</a></li>
+            <li><a href="Actividades.html" class="nav-link">Actividades</a></li>
+            <li><a href="recursos.html" class="nav-link">Recursos</a></li>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="tabs">
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="videos">
+          Videos Educativos
+        </button>
+        <button class="tab-btn" data-tab="lecturas">Lecturas y Cuentos</button>
+        <button class="tab-btn" data-tab="actividades">
+          Actividades Interactivas
+        </button>
+        <button class="tab-btn" data-tab="consejos">
+          Consejos para Padres
+        </button>
+      </div>
+
+      <div id="videos" class="tab-content active">
+        <h3>🎬 Videos Educativos</h3>
+        <p>
+          Explora nuestra colección de videos que enseñan valores, emociones y
+          habilidades sociales.
+        </p>
+
+        <div class="video-grid">
+          <iframe
+            src="https://www.youtube.com/embed/0hiqeX7tvAg?si=Vl1mzsxqg0Oocpbw"
+            title="Video 1"
+          ></iframe>
+          <iframe
+            src="https://www.youtube.com/embed/W39dNwKpFJo?si=AmCq5QwIM4B4FvzA"
+            title="Video 2"
+          ></iframe>
+          <iframe
+            src="https://www.youtube.com/embed/aqz-KE-bpKQ"
+            title="Video 3"
+          ></iframe>
+          <iframe
+            src="https://www.youtube.com/embed/HjOOGujV-LU?si=QL1nfoAUFqvEqnDA"
+            title="Video 4"
+          ></iframe>
+          <iframe
+            src="https://www.youtube.com/embed/iTDXJfSSqlE?si=wjlD0QTwfTI2sJwq"
+            title="Video 5"
+          ></iframe>
+          <iframe
+            src="https://www.youtube.com/embed/bO23pUTXyA4?si=Dhan03VR_KHkcj5J"
+            title="Video 6"
+          ></iframe>
+        </div>
+      </div>
+
+      <div id="lecturas" class="tab-content">
+        <h3>📚 Lecturas y Cuentos</h3>
+        <p>Haz clic en una imagen para descargar el cuento en formato PDF.</p>
+
+        <div class="lectura-grid">
+          <a href="pdfs/cuento1.pdf" download class="lectura-item">
+            <img src="img/cuento1.webp" alt="El árbol generoso" />
+            <span>El árbol generoso 🌳</span>
+          </a>
+          <a href="pdfs/cuento2.pdf" download class="lectura-item">
+            <img src="img/cuento2" alt="La sonrisa mágica" />
+            <span>La sonrisa mágica 😊</span>
+          </a>
+          <a href="pdfs/cuento3.pdf" download class="lectura-item">
+            <img src="img/cuento3" alt="El valor de compartir" />
+            <span>El valor de compartir 🤝</span>
+          </a>
+          <a href="pdfs/cuento4.pdf" download class="lectura-item">
+            <img src="img/cuento4" alt="El pequeño valiente" />
+            <span>El pequeño valiente 🦁</span>
+          </a>
+          <a href="pdfs/cuento5.pdf" download class="lectura-item">
+            <img src="img/cuento5" alt="Amigos del bosque" />
+            <span>Amigos del bosque 🐿️</span>
+          </a>
+          <a href="pdfs/cuento6.pdf" download class="lectura-item">
+            <img src="img/cuento6" alt="El secreto de la lluvia" />
+            <span>El secreto de la lluvia ☔</span>
+          </a>
+        </div>
+      </div>
+
+      <div id="actividades" class="tab-content">
+        <h3>🧩 Actividades Interactivas</h3>
+        <p>
+          Juegos, dibujos y ejercicios prácticos para reforzar los aprendizajes.
+        </p>
+
+        <div class="resource-grid">
+          <div class="resource-item">
+            <a href="https://www.educapeques.com/juegos" target="_blank"
+              >Juegos educativos</a
+            >
+          </div>
+          <div class="resource-item">
+            <a href="https://www.cokitos.com/" target="_blank"
+              >Cokitos - Juegos para niños</a
+            >
+          </div>
+          <div class="resource-item">
+            <a href="https://www.pocoyo.com/juegos" target="_blank"
+              >Juega con Pocoyó</a
+            >
+          </div>
+          <div class="resource-item">
+            <a
+              href="https://www.mundoprimaria.com/juegos-educativos"
+              target="_blank"
+              >Mundo Primaria</a
+            >
+          </div>
+          <div class="resource-item">
+            <a href="https://www.juegaspeques.com/" target="_blank"
+              >Juegas Peques</a
+            >
+          </div>
+          <div class="resource-item">
+            <a href="https://www.educlan.es/" target="_blank">Educlan</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="consejos" class="tab-content">
+        <h3>👨‍👩‍👧‍👦 Consejos para Padres</h3>
+        <p>
+          Acompañar el crecimiento de los niños es una aventura llena de
+          aprendizajes. Los padres no solo guían, también son los principales
+          modelos de conducta y emociones.
+          <strong
+            >Fomentar la empatía, el respeto y la curiosidad desde casa</strong
+          >
+          fortalece su desarrollo integral.
+        </p>
+
+        <p>
+          Dedica tiempo de calidad a conversar con tus hijos, escucha sus ideas
+          y ayúdalos a expresar lo que sienten. Las rutinas, los límites claros
+          y el afecto constante crean seguridad emocional. Recuerda que cada
+          pequeño avance —una palabra amable, una tarea bien hecha, una pregunta
+          curiosa— es una oportunidad para reforzar su confianza.
+        </p>
+
+        <p>
+          <em>El juego también es aprendizaje:</em> a través de él descubren el
+          mundo, desarrollan su creatividad y aprenden a convivir. Participar en
+          sus juegos, leer juntos o realizar actividades en familia fortalece el
+          vínculo y deja huellas positivas que duran toda la vida.
+        </p>
+
+        <div class="consejos-destacado">
+          <p>
+            🌟 En <strong>StormKids</strong> creemos que la educación comienza
+            en el hogar, con amor, paciencia y el ejemplo diario.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>StormKids</h3>
+          <p>
+            Aprende jugando y diviértete mientras descubres nuevas aventuras.
+          </p>
+        </div>
+        <div class="footer-column">
+          <h3>Enlaces</h3>
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="juegos.html">Juegos</a></li>
+            <li><a href="actividades.html">Actividades</a></li>
+          </ul>
+        </div>
+      </div>
+      <p class="copyright">© 2025 StormKids</p>
+    </footer>
+
+    <script>
+      const buttons = document.querySelectorAll(".tab-btn");
+      const contents = document.querySelectorAll(".tab-content");
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          buttons.forEach((b) => b.classList.remove("active"));
+          contents.forEach((c) => c.classList.remove("active"));
+
+          btn.classList.add("active");
+          document.getElementById(btn.dataset.tab).classList.add("active");
+        });
+      });
+    </script>
+  </body>
+</html>
